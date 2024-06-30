@@ -1,0 +1,21 @@
+scrape_configs:
+  - job_name: "mysql" # To get metrics about the mysql exporter’s targets
+    params:
+        # Not required. Will match value to child in config file. Default value is `client`.
+        # auth_module: [client.servers]
+        # auth_module: [client]
+    static_configs:
+        - targets: ["0.0.0.0:9104"]
+          # All mysql hostnames or unix sockets to monitor.
+        - targets: ["0.0.0.0:3306"]
+        #  relabel_configs:
+        #- source_labels: [__address__]
+        #  target_label: __param_target
+        #- source_labels: [__param_target]
+        #  target_label: instance
+        #- target_label: __address__
+          # The mysqld_exporter host:port
+          #replacement: mysql:9104
+    metrics_path: /metrics
+
+  

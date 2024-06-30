@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+  prometheus:
+    image: ubuntu/prometheus:latest
+    container_name: prometheus
+    restart: always
+    ports: 
+      - "9091:9090"
+    environment:
+      - TZ=America/Fortaleza
+    volumes:
+      - ./.docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - observable
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports: 
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - observable
+
+  jeager-all-in-one:
+    image: jaegertracing/all-in-one:1.29
+    container_name: jaeger
+    ports:
+      - "5775:5775/udp"   # UDP port for tchannel
+      - "6831:6831/udp"   # UDP port for gRPC
+      - "6832:6832/udp"   # UDP port for gRPC
+      - "5778:5778"       # HTTP port for service
+      - "16686:16686"     # HTTP port for web UI
+      - "14268:14268"     # HTTP port for collector
+      - "14250:14250"     # HTTP port for gRPC
+      - "9411:9411"       # HTTP port for Zipkin compatible collector
+    environment:
+      COLLECTOR_ZIPKIN_HTTP_PORT: 9411
+    networks:
+    - observable
+
+  mysql:
+    image: ubuntu/mysql:latest
+    container_name: mysql
+    ports:
+      - "3306:3306"
+      - "9104:9104"
+    #command: ["apt-get", "update", "-y"]
+    environment:
+      MYSQL_DATABASE: teste
+      MYSQL_USER: teste
+      MYSQL_PASSWORD: teste@2024
+      MYSQL_ROOT_PASSWORD: teste@2024
+    
+    volumes:
+      - ./.docker/mysql:/var/lib/mysql
+      - ./.docker/mycnf/my.cnf:/home/mycnf/my.cnf
+      - ./.docker/mysqld_exporter:/opt/mysqld_exporter
+ 
+    networks:
+      - observable
+  
+
+networks:
+  observable:
+  #  driver: brigde
+
+
+
+  
