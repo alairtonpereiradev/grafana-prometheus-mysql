@@ -7,7 +7,7 @@ Coletando metricas do mysql, importando no prometheus e visualizando no grafana 
 CREATE USER 'exporter'@'localhost' IDENTIFIED BY 'password' WITH MAX_USER_CONNECTIONS 3;
 GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'localhost';
 
-# Baixar e configurar o msyql_exporter
+# Baixar e configurar o mysql_exporter
 
 Dicas: https://grafana.com/oss/prometheus/exporters/mysql-exporter/?tab=installation
 
